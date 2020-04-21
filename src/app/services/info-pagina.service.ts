@@ -2,46 +2,48 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { InfoPagina } from '../interfaces/info-pagina.interface';
 
-
-
 @Injectable({
   providedIn: 'root'
 })
 export class InfoPaginaService {
 
-  info:InfoPagina ={}
-  cargar=false
-  equipo:any[]=[];
+  info: InfoPagina = {};
+  cargada = false;
 
-  constructor( private http: HttpClient) { 
+  equipo: any[] = [];
 
-    this.cargarInfo()
-    this.cargarEquipo()
-  
-   
+  constructor( private http: HttpClient ) {
+
+    this.cargarInfo();
+    this.cargarEquipo();
+
   }
-private cargarInfo(){
-  //console.log("servicios de infoPagina listo")
 
+  private cargarInfo() {
+    // Leer el archivo JSON
     this.http.get('assets/data/data-pagina.json')
-    .subscribe( (res: InfoPagina)=>{
+    .subscribe( (resp: InfoPagina) => {
+      this.cargada = true;
+      this.info = resp;
+    });
+  }
 
-      this.cargar=true
-      this.info=res
-     // console.log(res)
+
+  private cargarEquipo() {
+
+    // Leer el archivo JSON
+    this.http.get('https://angular-html-25cf9.firebaseio.com/equipo.json')
+    .subscribe( (resp: any[]) => {
+
+      this.equipo = resp;
+      // console.log(resp);
     });
 
-}
 
-private cargarEquipo(){
-  this.http.get('https://angular-html-37321.firebaseio.com/equipo.json')
-    .subscribe( (res:any[] )=>{
-
-      
-      
-      this.equipo=res
-     // console.log(res)
-    });
+    // this.equipo = resp
+  }
 
 }
-}
+
+
+
